@@ -6,14 +6,7 @@ import Footer from "./footer"
 import Post from "./post"
 import PostList from "./post_list"
 import Loading from "./loading"
-import { updateToken } from "./api"
-import AppContext, {
-  DISCOVERY_PAGE_ID,
-  FAVORITE_PAGE_ID,
-  SEARCH_PAGE_ID,
-  POST_LIST_PAGE_TYPE,
-  POST_PAGE_TYPE,
-} from "./contexts.js"
+import AppContext, { POST_LIST_PAGE_TYPE } from "./contexts.js"
 
 const useStyles = makeStyles({
   home: {
@@ -30,12 +23,9 @@ const useStyles = makeStyles({
 const Home = () => {
   const classes = useStyles()
   const [init, setInit] = React.useState(false)
-  const { state, dispatch } = React.useContext(AppContext)
+  const { state } = React.useContext(AppContext)
 
-  React.useEffect(() => {
-    ;(async () => await updateToken())()
-    setTimeout(() => setInit(true), 500)
-  }, [])
+  React.useEffect(() => setTimeout(() => setInit(true), 500), [])
 
   return (
     <Box
@@ -48,7 +38,7 @@ const Home = () => {
       {init ? (
         <>
           <Header />
-          {state.currentPageType == POST_LIST_PAGE_TYPE ? (
+          {state.currentPageType === POST_LIST_PAGE_TYPE ? (
             <PostList />
           ) : (
             <Post />

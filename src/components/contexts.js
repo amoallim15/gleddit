@@ -17,12 +17,19 @@ const initialState = {
   currentPostURL: null,
   //
   currentHotPosts: [],
-  currentTopPosts: [],
-  currentNewPosts: [],
-  currentFavPosts: [],
-  currentSearchPosts: [],
+  currentHotAfter: "",
   //
+  currentTopPosts: [],
+  currentTopAfter: "",
+  //
+  currentNewPosts: [],
+  currentNewAfter: "",
+  //
+  currentSearchPosts: [],
+  currentSearchAfter: "",
   currentSearchQuery: "",
+  //
+  currentFavPosts: [],
 }
 
 const AppContext = React.createContext(initialState)
@@ -49,8 +56,31 @@ export const ContextProvider = ({ children }) => {
           currentPageID: DISCOVERY_PAGE_ID,
           currentPageSubID: action.payload,
         }
+      case "refresh_post_lists":
+        switch (action.payload.type) {
+          case "hot":
+            return {
+              ...state,
+              currentHotPosts: action.payload.children,
+              currentHotAfter: action.payload.after,
+            }
+          case "top":
+            return {
+              ...state,
+              currentTopPosts: action.payload.children,
+              currentTopAfter: action.payload.after,
+            }
+          case "new":
+            return {
+              ...state,
+              currentNewPosts: action.payload.children,
+              currentNewAfter: action.payload.after,
+            }
+          default:
+            throw new Error("Unknown action payload after value.")
+        }
       default:
-        throw new Error("no action")
+        throw new Error("Unknown action type value.")
       // case "more":
       //     return {
       //         ...state,

@@ -82,7 +82,7 @@ const Header = () => {
         </Toolbar>
       </AppBar>
 
-      {state.currentPageID == DISCOVERY_PAGE_ID ? (
+      {state.currentPageID === DISCOVERY_PAGE_ID ? (
         <Paper elevation={0} square className={classes.subTabs}>
           <Tabs value={state.currentPageSubID} onChange={handleSubTabChange}>
             <Tab label="Hot" index={HOT_SUB_PAGE_ID} />

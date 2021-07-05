@@ -2,7 +2,7 @@ import React from "react"
 import { InputBase } from "@material-ui/core"
 import { fade, makeStyles } from "@material-ui/core/styles"
 import SearchIcon from "@material-ui/icons/Search"
-import AppContext, { SEARCH_PAGE_ID } from "./contexts.js"
+import AppContext /*, { SEARCH_PAGE_ID }*/ from "./contexts.js"
 
 const useStyles = makeStyles((theme) => ({
   search: {

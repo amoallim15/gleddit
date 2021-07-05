@@ -13,6 +13,9 @@ import Store from "./store"
 const TOKEN_URL = "https://www.reddit.com/api/v1/access_token"
 const API_URL = "https://oauth.reddit.com"
 //
+const TOKEN_LOCAL_STORAGE_KEY = "TOKEN"
+const POST_TYPES = ["hot", "top", "new"]
+//
 const AUTH_OPTIONS = {
   method: "POST",
   headers: {
@@ -23,17 +26,17 @@ const AUTH_OPTIONS = {
   body: "grant_type=client_credentials&username=amoallim15&password=a1l5i9j15",
   // mode: "no-cors",
 }
-
+//
 const getAPIOptions = (token) => {
   return {
     method: "GET",
     headers: {
-      Authorization: `Bearer ${token}`, // => "Bearer token"
+      Authorization: `Bearer ${token}`, // => "Bearer token".
     },
   }
 }
 
-export const updateToken = async () => {
+export const refreshToken = async () => {
   // check if token is stored in the localStorage.
   let token = Store.get("TOKEN")
   if (token) {
@@ -43,9 +46,33 @@ export const updateToken = async () => {
       return token
     }
   }
-  // if no token, get a new one and store it in localStorage.
+  // get a new token and store it in localStorage.
   let res = await fetch(TOKEN_URL, AUTH_OPTIONS)
   token = await res.json()
-  Store.set("TOKEN", token)
+  Store.set(TOKEN_LOCAL_STORAGE_KEY, token)
   return token
+}
+
+export const getPosts = async () => {
+  // fetching posts for hot/top/new will be done concurrently.
+  let promises = []
+  let token = await refreshToken()
+  POST_TYPES.forEach((post_type) => {
+    promises.push(
+      (async () => {
+        let res = await fetch(
+          `${API_URL}/${post_type}`,
+          getAPIOptions(token.access_token)
+        )
+        let data = await res.json()
+        return {
+          type: post_type,
+          after: data.data.after,
+          dist: data.data.dist,
+          children: data.data.children,
+        }
+      })()
+    )
+  })
+  return Promise.all(promises)
 }
