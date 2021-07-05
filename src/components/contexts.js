@@ -2,8 +2,8 @@ import React from "react"
 
 export const DISCOVERY_PAGE_ID = 0
 export const FAVORITE_PAGE_ID = 1
-export const SEARCH_PAGE_ID = 2
-export const PROFILE_PAGE_ID = 3
+export const PROFILE_PAGE_ID = 2
+export const SEARCH_PAGE_ID = 3
 export const HOT_SUB_PAGE_ID = 0
 export const TOP_SUB_PAGE_ID = 1
 export const NEW_SUB_PAGE_ID = 2
@@ -38,6 +38,12 @@ export const ContextProvider = ({ children }) => {
         return {
           ...state,
           currentPageID: action.payload,
+        }
+      case "discovery":
+        return {
+          ...state,
+          currentPageID: DISCOVERY_PAGE_ID,
+          currentPageSubID: action.payload,
         }
       default:
         throw new Error("no action")

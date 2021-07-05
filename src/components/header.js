@@ -6,6 +6,8 @@ import {
   Typography,
   IconButton,
   Box,
+  Tabs,
+  Tab,
 } from "@material-ui/core/"
 import PersonIcon from "@material-ui/icons/Person"
 import { makeStyles } from "@material-ui/core/styles"
@@ -17,9 +19,6 @@ import AppContext, {
   FAVORITE_PAGE_ID,
   PROFILE_PAGE_ID,
 } from "./contexts.js"
-
-import Tabs from "@material-ui/core/Tabs"
-import Tab from "@material-ui/core/Tab"
 
 const useStyles = makeStyles((theme) => ({
   refreshButton: {

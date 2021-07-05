@@ -1,12 +1,15 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import "./index.css"
-import Home from "./components/home"
+import "./assets/index.css"
 import reportWebVitals from "./etc/reportWebVitals"
+import Home from "./components/home"
+import { ContextProvider } from "./components/contexts"
 
 ReactDOM.render(
   <React.StrictMode>
-    <Home />
+    <ContextProvider>
+      <Home />
+    </ContextProvider>
   </React.StrictMode>,
   document.getElementById("root")
 )
