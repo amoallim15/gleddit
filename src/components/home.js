@@ -3,15 +3,16 @@ import { makeStyles } from "@material-ui/core/styles"
 import { Box } from "@material-ui/core"
 import Header from "./header"
 import Footer from "./footer"
-import Discovery from "./discovery"
-import Search from "./search"
-import Favorites from "./favorites"
+import Post from "./post"
+import PostList from "./post_list"
 import Loading from "./loading"
 import { updateToken } from "./api"
 import AppContext, {
   DISCOVERY_PAGE_ID,
   FAVORITE_PAGE_ID,
   SEARCH_PAGE_ID,
+  POST_LIST_PAGE_TYPE,
+  POST_PAGE_TYPE,
 } from "./contexts.js"
 
 const useStyles = makeStyles({
@@ -33,7 +34,7 @@ const Home = () => {
 
   React.useEffect(() => {
     ;(async () => await updateToken())()
-    setTimeout(() => setInit(true), 200)
+    setTimeout(() => setInit(true), 500)
   }, [])
 
   return (
@@ -47,9 +48,11 @@ const Home = () => {
       {init ? (
         <>
           <Header />
-          <Discovery hidden={state.currentPageID != DISCOVERY_PAGE_ID} />
-          <Search hidden={state.currentPageID != FAVORITE_PAGE_ID} />
-          <Favorites hidden={state.currentPageID != SEARCH_PAGE_ID} />
+          {state.currentPageType == POST_LIST_PAGE_TYPE ? (
+            <PostList />
+          ) : (
+            <Post />
+          )}
           <Footer />
         </>
       ) : (

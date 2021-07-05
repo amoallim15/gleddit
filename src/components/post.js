@@ -1,7 +1,7 @@
 import React from "react"
 
-const Search = () => {
+const Post = () => {
   return <div />
 }
 
-export default Search
+export default Post

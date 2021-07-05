@@ -7,10 +7,14 @@ export const SEARCH_PAGE_ID = 3
 export const HOT_SUB_PAGE_ID = 0
 export const TOP_SUB_PAGE_ID = 1
 export const NEW_SUB_PAGE_ID = 2
+export const POST_LIST_PAGE_TYPE = 0
+export const POST_PAGE_TYPE = 1
 
 const initialState = {
-  currentPageID: 0,
-  currentPageSubID: 0,
+  currentPageID: DISCOVERY_PAGE_ID,
+  currentPageSubID: HOT_SUB_PAGE_ID,
+  currentPageType: POST_LIST_PAGE_TYPE,
+  currentPostURL: null,
   //
   currentHotPosts: [],
   currentTopPosts: [],
