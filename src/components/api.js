@@ -76,3 +76,18 @@ export const getPosts = async () => {
   })
   return Promise.all(promises)
 }
+
+export const getPostComments = async (post_id) => {
+  let token = await refreshToken()
+  let res = await fetch(
+    `${API_URL}/comments/${post_id}`,
+    getAPIOptions(token.access_token)
+  )
+  if (res.status !== 200) return []
+
+  let data = await res.json()
+  let last_item = data[1].data.children.pop()
+  if (last_item && last_item.kind !== "more")
+    data[1].data.children.push(last_item)
+  return data[1].data.children
+}

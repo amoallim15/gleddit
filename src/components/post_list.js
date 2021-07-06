@@ -17,7 +17,7 @@ const PENDING_STATE = 1
 const LOADING_STATE = 2
 const DONE_STATE = 3
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     minWidth: 510,
   },
