@@ -1,5 +1,20 @@
 # Gleddit Coding Challenge 🎧 &nbsp; ![hard](https://img.shields.io/badge/-Medium-yellow) ![time](https://img.shields.io/badge/%E2%8F%B0-1Day-blue)
 
+# Implementation Notes
+
+1. The website is build in a single-page-app architecture.
+2. The website is pure front-end, it doesn't need a back-end server to be deployed.
+3. In order to generate the production version, please run the following command:
+
+```
+$ npm install
+$ npm run build
+```
+
+4. After building the website, the generated build folder may be uploaded to an object store such as (aws s3).
+5. Because of the consideration mentioned above, I skipped implementing a Dockerfile as there will be no need for it.
+
+
 &nbsp;
 
 # Goals/Outcomes ✨
