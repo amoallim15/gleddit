@@ -4,17 +4,16 @@ export const DISCOVERY_PAGE_ID = 0
 export const FAVORITE_PAGE_ID = 1
 export const PROFILE_PAGE_ID = 2
 export const SEARCH_PAGE_ID = 3
+export const POST_PAGE_ID = 4
+//
 export const HOT_SUB_PAGE_ID = 0
 export const TOP_SUB_PAGE_ID = 1
 export const NEW_SUB_PAGE_ID = 2
-export const POST_LIST_PAGE_TYPE = 0
-export const POST_PAGE_TYPE = 1
-
+//
 const initialState = {
   currentPageID: DISCOVERY_PAGE_ID,
   currentPageSubID: HOT_SUB_PAGE_ID,
-  currentPageType: POST_LIST_PAGE_TYPE,
-  currentPostURL: null,
+  currentPost: null,
   //
   currentHotPosts: [],
   currentHotAfter: "",
@@ -30,6 +29,7 @@ const initialState = {
   currentSearchQuery: "",
   //
   currentFavPosts: [],
+  currentFavPostsURLs: [],
 }
 
 const AppContext = React.createContext(initialState)
@@ -78,6 +78,33 @@ export const ContextProvider = ({ children }) => {
             }
           default:
             throw new Error("Unknown action payload after value.")
+        }
+      case "favorite_post":
+        if (state.currentFavPostsURLs.includes(action.payload.data.permalink))
+          return {
+            ...state,
+            currentFavPosts: state.currentFavPosts.filter((value, index) => {
+              return value !== action.payload
+            }),
+            currentFavPostsURLs: state.currentFavPostsURLs.filter(
+              (value, index) => {
+                return value !== action.payload.data.permalink
+              }
+            ),
+          }
+        else
+          return {
+            ...state,
+            currentFavPosts: state.currentFavPosts.concat([action.payload]),
+            currentFavPostsURLs: state.currentFavPostsURLs.concat([
+              action.payload.data.permalink,
+            ]),
+          }
+      case "view_post":
+        return {
+          ...state,
+          currentPageID: POST_PAGE_ID,
+          currentPost: action.payload,
         }
       default:
         throw new Error("Unknown action type value.")

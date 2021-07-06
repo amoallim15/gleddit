@@ -6,11 +6,10 @@ import Footer from "./footer"
 import Post from "./post"
 import PostList from "./post_list"
 import Loading from "./loading"
-import AppContext, { POST_LIST_PAGE_TYPE } from "./contexts.js"
+import AppContext, { POST_PAGE_ID } from "./contexts.js"
 
 const useStyles = makeStyles({
   home: {
-    textAlign: "center",
     backgroundColor: "#282c34",
     minHeight: "100vh",
     color: "white",
@@ -38,11 +37,12 @@ const Home = () => {
       {init ? (
         <>
           <Header />
-          {state.currentPageType === POST_LIST_PAGE_TYPE ? (
+          <div hidden={state.currentPageID === POST_PAGE_ID}>
             <PostList />
-          ) : (
+          </div>
+          <div hidden={state.currentPageID !== POST_PAGE_ID}>
             <Post />
-          )}
+          </div>
           <Footer />
         </>
       ) : (

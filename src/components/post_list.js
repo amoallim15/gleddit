@@ -18,15 +18,20 @@ const LOADING_STATE = 2
 const DONE_STATE = 3
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    minWidth: 510,
+  },
   container: {
     color: "white",
-    padding: 12,
     marginTop: 30,
     marginBottom: 30,
     width: "100%",
   },
   moreButton: {
-    width: 410,
+    flexGrow: 1,
+  },
+  noPosts: {
+    textAlign: "center",
   },
 }))
 
@@ -74,21 +79,26 @@ const PostList = () => {
         setPostList(state.currentSearchPosts)
         return
       default:
-        throw new Error("Invalid page state.")
+        return
     }
   }, [state, setPostList])
 
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" className={classes.root}>
       <div className={classes.container}>
         {postListState !== DONE_STATE ? (
           <Loading />
         ) : (
-          <List>
-            {postList.map((post, index) => (
-              <PostSummary key={index} post={post} index={index} />
-            ))}
-          </List>
+          <>
+            <div hidden={postList.length !== 0} className={classes.noPosts}>
+              No posts available.
+            </div>
+            <List hidden={postList.length === 0}>
+              {postList.map((post, index) => (
+                <PostSummary key={index} post={post} index={index} />
+              ))}
+            </List>
+          </>
         )}
       </div>
 

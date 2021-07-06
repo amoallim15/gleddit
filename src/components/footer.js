@@ -1,12 +1,11 @@
 import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
-import { CssBaseline, Typography } from "@material-ui/core"
+import { CssBaseline, Typography, Box } from "@material-ui/core"
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(8),
     padding: theme.spacing(8),
-    width: "100%",
     backgroundColor: "#282c34",
   },
 }))
@@ -15,11 +14,14 @@ const Footer = () => {
   const classes = useStyles()
 
   return (
-    <footer className={classes.root}>
-      <CssBaseline />
-      <Typography variant="body1">
-        Ali Moallim - amoallim15@gmail.com
-      </Typography>
+    <footer>
+      <Box display="flex" className={classes.root}>
+        {" "}
+        <CssBaseline />
+        <Typography variant="body1">
+          Ali Moallim - amoallim15@gmail.com
+        </Typography>
+      </Box>
     </footer>
   )
 }

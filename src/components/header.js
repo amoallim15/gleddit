@@ -28,10 +28,8 @@ const useStyles = makeStyles((theme) => ({
   refreshButton: {
     marginRight: theme.spacing(2),
   },
-  subTabs: {
-    display: "flex",
+  paper: {
     width: "100%",
-    justifyContent: "center",
   },
 }))
 
@@ -82,17 +80,20 @@ const Header = () => {
         </Toolbar>
       </AppBar>
 
-      {state.currentPageID === DISCOVERY_PAGE_ID ? (
-        <Paper elevation={0} square className={classes.subTabs}>
+      <Paper
+        elevation={0}
+        square
+        className={classes.paper}
+        hidden={state.currentPageID !== DISCOVERY_PAGE_ID}
+      >
+        <Box display="flex" justifyContent="center">
           <Tabs value={state.currentPageSubID} onChange={handleSubTabChange}>
             <Tab label="Hot" index={HOT_SUB_PAGE_ID} />
             <Tab label="Top" index={TOP_SUB_PAGE_ID} />
             <Tab label="New" index={NEW_SUB_PAGE_ID} />
           </Tabs>
-        </Paper>
-      ) : (
-        <></>
-      )}
+        </Box>
+      </Paper>
     </>
   )
 }
