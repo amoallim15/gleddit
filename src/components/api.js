@@ -1,5 +1,3 @@
-import Store from "./store"
-
 // WARNING::
 // =========
 // Current project implementation uses a single-page-application
@@ -14,6 +12,7 @@ const TOKEN_URL = "https://www.reddit.com/api/v1/access_token"
 const API_URL = "https://oauth.reddit.com"
 //
 const TOKEN_LOCAL_STORAGE_KEY = "TOKEN"
+export const FAV_LOCAL_STORAGE_KEY = "FAVS"
 const POST_TYPES = ["hot", "top", "new"]
 //
 const AUTH_OPTIONS = {
@@ -37,26 +36,15 @@ const getAPIOptions = (token) => {
 }
 
 export const refreshToken = async () => {
-  // check if token is stored in the localStorage.
-  let token = Store.get("TOKEN")
-  if (token) {
-    // validate token
-    let res = await fetch(`${API_URL}/hot`, getAPIOptions(token.access_token))
-    if (res.status === 200) {
-      return token
-    }
-  }
-  // get a new token and store it in localStorage.
   let res = await fetch(TOKEN_URL, AUTH_OPTIONS)
-  token = await res.json()
-  Store.set(TOKEN_LOCAL_STORAGE_KEY, token)
+  let token = await res.json()
   return token
 }
 
-export const getPosts = async () => {
+export const getPosts = async (token) => {
   // fetching posts for hot/top/new will be done concurrently.
+  console.log(token)
   let promises = []
-  let token = await refreshToken()
   POST_TYPES.forEach((post_type) => {
     promises.push(
       (async () => {
@@ -77,8 +65,7 @@ export const getPosts = async () => {
   return Promise.all(promises)
 }
 
-export const getPostComments = async (post_id) => {
-  let token = await refreshToken()
+export const getPostComments = async (token, post_id) => {
   let res = await fetch(
     `${API_URL}/comments/${post_id}`,
     getAPIOptions(token.access_token)
@@ -92,8 +79,7 @@ export const getPostComments = async (post_id) => {
   return data[1].data.children
 }
 
-export const getMorePosts = async (post_type, after) => {
-  let token = await refreshToken()
+export const getMorePosts = async (token, post_type, after) => {
   let res = await fetch(
     `${API_URL}/${post_type}?after=${after}`,
     getAPIOptions(token.access_token)

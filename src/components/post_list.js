@@ -61,7 +61,11 @@ const PostList = () => {
           break
       }
       setPostListState(LOADING_STATE)
-      let more_post_list = await getMorePosts(post_type, after)
+      let more_post_list = await getMorePosts(
+        state.currentToken,
+        post_type,
+        after
+      )
       dispatch({ type: "refresh_post_lists", payload: more_post_list })
       setPostListState(DONE_STATE)
     })()
@@ -70,7 +74,7 @@ const PostList = () => {
   React.useEffect(() => {
     ;(async () => {
       setPostListState(LOADING_STATE)
-      let post_lists = await getPosts()
+      let post_lists = await getPosts(state.currentToken)
       post_lists.forEach((post_list) => {
         dispatch({ type: "refresh_post_lists", payload: post_list })
       })

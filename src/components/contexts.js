@@ -1,5 +1,6 @@
 import React from "react"
 
+//
 export const DISCOVERY_PAGE_ID = 0
 export const FAVORITE_PAGE_ID = 1
 export const PROFILE_PAGE_ID = 2
@@ -11,6 +12,7 @@ export const TOP_SUB_PAGE_ID = 1
 export const NEW_SUB_PAGE_ID = 2
 //
 const initialState = {
+  currentToken: null,
   currentPageID: DISCOVERY_PAGE_ID,
   currentPageSubID: HOT_SUB_PAGE_ID,
   currentPost: null,
@@ -38,6 +40,11 @@ const { Provider } = AppContext
 export const ContextProvider = ({ children }) => {
   const [state, dispatch] = React.useReducer((state, action) => {
     switch (action.type) {
+      case "refresh_token":
+        return {
+          ...state,
+          currentToken: action.payload,
+        }
       case "search":
         return {
           ...state,
@@ -86,7 +93,8 @@ export const ContextProvider = ({ children }) => {
             throw new Error("Unknown action payload after value.")
         }
       case "favorite_post":
-        if (state.currentFavPostsURLs.includes(action.payload.data.permalink))
+        //
+        if (state.currentFavPostsURLs.includes(action.payload.data.permalink)) {
           return {
             ...state,
             currentFavPosts: state.currentFavPosts.filter((value, index) => {
@@ -98,7 +106,7 @@ export const ContextProvider = ({ children }) => {
               }
             ),
           }
-        else
+        } else {
           return {
             ...state,
             currentFavPosts: state.currentFavPosts.concat([action.payload]),
@@ -106,6 +114,7 @@ export const ContextProvider = ({ children }) => {
               action.payload.data.permalink,
             ]),
           }
+        }
       case "view_post":
         return {
           ...state,
@@ -114,16 +123,6 @@ export const ContextProvider = ({ children }) => {
         }
       default:
         throw new Error("Unknown action type value.")
-      // case "more":
-      //     return {
-      //         ...state,
-      //         currentPage: state.currentPage + 1
-      //     }
-      // case "refresh":
-      //     return {
-      //         ...state,
-      //         currentPage: state.currentPosts.concat(action.payload)
-      //     }
     }
   }, initialState)
 

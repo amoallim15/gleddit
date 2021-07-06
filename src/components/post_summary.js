@@ -33,6 +33,7 @@ const PostSummary = ({ post, index }) => {
   const classes = useStyles()
   const { state, dispatch } = React.useContext(AppContext)
   const onFavClick = () => {
+    console.log("a")
     dispatch({ type: "favorite_post", payload: post })
   }
   const onPostClick = () => {

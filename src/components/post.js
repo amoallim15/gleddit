@@ -64,7 +64,10 @@ const Post = () => {
     if (state.currentPost === null) return
     ;(async () => {
       setCommentListState(LOADING_STATE)
-      let comment_list = await getPostComments(state.currentPost.data.id)
+      let comment_list = await getPostComments(
+        state.currentToken,
+        state.currentPost.data.id
+      )
       setCommentList(comment_list)
       setCommentListState(DONE_STATE)
     })()

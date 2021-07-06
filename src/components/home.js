@@ -7,6 +7,7 @@ import Post from "./post"
 import PostList from "./post_list"
 import Loading from "./loading"
 import AppContext, { POST_PAGE_ID } from "./contexts.js"
+import { refreshToken } from "./api"
 
 const useStyles = makeStyles({
   home: {
@@ -22,9 +23,15 @@ const useStyles = makeStyles({
 const Home = () => {
   const classes = useStyles()
   const [init, setInit] = React.useState(false)
-  const { state } = React.useContext(AppContext)
+  const { state, dispatch } = React.useContext(AppContext)
 
-  React.useEffect(() => setTimeout(() => setInit(true), 500), [])
+  React.useEffect(() => {
+    ;(async () => {
+      const token = await refreshToken()
+      dispatch({ type: "refresh_token", payload: token })
+      setTimeout(() => setInit(true), 200)
+    })()
+  }, [])
 
   return (
     <Box
