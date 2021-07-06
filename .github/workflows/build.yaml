@@ -1,0 +1,30 @@
+name: deploy
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install Node.js 
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+        
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Production
+        run: npm run build
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Gleddit
+          path: ./build/

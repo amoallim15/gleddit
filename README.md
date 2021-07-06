@@ -13,7 +13,7 @@ $ npm run build
 
 4. After building the website, the generated build folder may be uploaded to an object store such as (aws s3).
 5. Because of the consideration mentioned above, I skipped implementing a Dockerfile as there will be no need for it.
-
+6. I included CI/CD implementation to generate the production build folder automatically after every git push command.
 
 &nbsp;
 
