@@ -10,12 +10,15 @@ export const POST_PAGE_ID = 4
 export const HOT_SUB_PAGE_ID = 0
 export const TOP_SUB_PAGE_ID = 1
 export const NEW_SUB_PAGE_ID = 2
+export const POST_LIST_LOADING = 0
+export const POST_LIST_DONE = 1
 //
 const initialState = {
   currentToken: null,
   currentPageID: DISCOVERY_PAGE_ID,
   currentPageSubID: HOT_SUB_PAGE_ID,
   currentPost: null,
+  currentPostListState: POST_LIST_LOADING,
   //
   currentHotPosts: [],
   currentHotAfter: "",
@@ -29,6 +32,8 @@ const initialState = {
   currentSearchPosts: [],
   currentSearchAfter: "",
   currentSearchQuery: "",
+  oldSearchQuery: null,
+  resetPostListFlag: 0,
   //
   currentFavPosts: [],
   currentFavPostsURLs: [],
@@ -40,24 +45,50 @@ const { Provider } = AppContext
 export const ContextProvider = ({ children }) => {
   const [state, dispatch] = React.useReducer((state, action) => {
     switch (action.type) {
+      case "update_search_post_list_state":
+        return {
+          ...state,
+          currentPostListState: action.payload,
+          currentPageID: SEARCH_PAGE_ID,
+        }
+      case "update_post_list_state":
+        return {
+          ...state,
+          currentPostListState: action.payload,
+        }
       case "refresh_token":
         return {
           ...state,
           currentToken: action.payload,
         }
-      case "search":
+      case "change_search_query":
+        return {
+          ...state,
+          currentSearchQuery: action.payload[0],
+          oldSearchQuery: action.payload[1],
+        }
+      case "refresh_search_lists":
         return {
           ...state,
           currentPageID: SEARCH_PAGE_ID,
-          searchPosts: [],
-          currentSearchQuery: action.payload,
+          currentSearchPosts: action.payload.children,
+          currentSearchAfter: action.payload.after,
         }
-      case "navigate":
+      case "append_search_lists":
+        return {
+          ...state,
+          currentPageID: SEARCH_PAGE_ID,
+          currentSearchPosts: state.currentSearchPosts.concat(
+            action.payload.children
+          ),
+          currentHotAfter: action.payload.after,
+        }
+      case "navigate_tabs":
         return {
           ...state,
           currentPageID: action.payload,
         }
-      case "discovery":
+      case "navigate_discovery_sub_tabs":
         return {
           ...state,
           currentPageID: DISCOVERY_PAGE_ID,

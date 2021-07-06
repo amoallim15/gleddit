@@ -2,7 +2,8 @@ import React from "react"
 import { InputBase } from "@material-ui/core"
 import { fade, makeStyles } from "@material-ui/core/styles"
 import SearchIcon from "@material-ui/icons/Search"
-import AppContext /*, { SEARCH_PAGE_ID }*/ from "./contexts.js"
+import AppContext, { POST_LIST_LOADING, POST_LIST_DONE } from "./contexts.js"
+import { searchQuery } from "./api.js"
 
 const useStyles = makeStyles((theme) => ({
   search: {
@@ -48,8 +49,35 @@ const SearchBar = () => {
   const classes = useStyles()
   const { state, dispatch } = React.useContext(AppContext)
   const handleChange = (e) => {
-    if (e.target.value !== state.currentSearchQuery)
-      dispatch({ type: "search", payload: e.target.value })
+    dispatch({
+      type: "change_search_query",
+      payload: [e.target.value, state.currentSearchQuery],
+    })
+  }
+
+  const handleOnSubmit = (e) => {
+    if (e.target.value !== state.currentSearchQuery) {
+      ;(async () => {
+        dispatch({
+          type: "update_search_post_list_state",
+          payload: POST_LIST_LOADING,
+        })
+        let search_result = await searchQuery(
+          state.currentToken,
+          state.currentSearchQuery
+        )
+        dispatch({
+          type: "refresh_search_lists",
+          payload: search_result,
+          query: e.target.value,
+        })
+        dispatch({
+          type: "update_search_post_list_state",
+          payload: POST_LIST_DONE,
+        })
+      })()
+    }
+    e.preventDefault()
   }
 
   return (
@@ -57,15 +85,17 @@ const SearchBar = () => {
       <div className={classes.searchIcon}>
         <SearchIcon />
       </div>
-      <InputBase
-        placeholder="Search…"
-        classes={{
-          root: classes.inputRoot,
-          input: classes.inputInput,
-        }}
-        inputProps={{ "aria-label": "search" }}
-        onChange={handleChange}
-      />
+      <form onSubmit={handleOnSubmit}>
+        <InputBase
+          placeholder="Search…"
+          classes={{
+            root: classes.inputRoot,
+            input: classes.inputInput,
+          }}
+          inputProps={{ "aria-label": "search" }}
+          onChange={handleChange}
+        />
+      </form>
     </div>
   )
 }

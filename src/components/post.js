@@ -71,7 +71,12 @@ const Post = () => {
       setCommentList(comment_list)
       setCommentListState(DONE_STATE)
     })()
-  }, [setCommentListState, setCommentList, state])
+  }, [
+    setCommentListState,
+    setCommentList,
+    state.currentToken,
+    state.currentPost,
+  ])
 
   if (state.currentPost === null) return <></>
   return (

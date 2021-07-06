@@ -11,8 +11,6 @@
 const TOKEN_URL = "https://www.reddit.com/api/v1/access_token"
 const API_URL = "https://oauth.reddit.com"
 //
-const TOKEN_LOCAL_STORAGE_KEY = "TOKEN"
-export const FAV_LOCAL_STORAGE_KEY = "FAVS"
 const POST_TYPES = ["hot", "top", "new"]
 //
 const AUTH_OPTIONS = {
@@ -43,7 +41,6 @@ export const refreshToken = async () => {
 
 export const getPosts = async (token) => {
   // fetching posts for hot/top/new will be done concurrently.
-  console.log(token)
   let promises = []
   POST_TYPES.forEach((post_type) => {
     promises.push(
@@ -89,6 +86,18 @@ export const getMorePosts = async (token, post_type, after) => {
     type: post_type,
     after: data.data.after,
     dist: data.data.dist,
+    children: data.data.children,
+  }
+}
+
+export const searchQuery = async (token, query, after) => {
+  let res = await fetch(
+    `${API_URL}/search?q=${query}&after=${after}`,
+    getAPIOptions(token.access_token)
+  )
+  let data = await res.json()
+  return {
+    after: data.data.after,
     children: data.data.children,
   }
 }

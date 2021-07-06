@@ -35,10 +35,10 @@ const Header = () => {
   const classes = useStyles()
   const { state, dispatch } = React.useContext(AppContext)
   const handleTabChange = (event, page_id) => {
-    dispatch({ type: "navigate", payload: page_id })
+    dispatch({ type: "navigate_tabs", payload: page_id })
   }
   const handleSubTabChange = (event, page_id) => {
-    dispatch({ type: "discovery", payload: page_id })
+    dispatch({ type: "navigate_discovery_sub_tabs", payload: page_id })
   }
 
   return (

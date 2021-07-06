@@ -31,7 +31,7 @@ const Home = () => {
       dispatch({ type: "refresh_token", payload: token })
       setTimeout(() => setInit(true), 200)
     })()
-  }, [])
+  }, [dispatch])
 
   return (
     <Box
