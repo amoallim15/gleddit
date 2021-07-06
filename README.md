@@ -6,12 +6,17 @@
 2. The website is pure front-end, it doesn't need a back-end server to be deployed.
 3. In order to generate the production version, please run the following command:
 
-```
+```bsah
 $ npm install
 $ npm run build
 ```
 
-4. After building the website, the generated build folder may be uploaded to an object store such as (aws s3).
+4. After building the website, the generated build folder may be uploaded to an object store such as (aws s3) or served locally using the following command:
+
+```bash
+$ serve -s build
+```
+
 5. Because of the consideration mentioned above, I skipped implementing a Dockerfile as there will be no need for it.
 6. I included CI/CD implementation to generate the production build folder automatically after every git push command.
 
