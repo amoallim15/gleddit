@@ -91,3 +91,18 @@ export const getPostComments = async (post_id) => {
     data[1].data.children.push(last_item)
   return data[1].data.children
 }
+
+export const getMorePosts = async (post_type, after) => {
+  let token = await refreshToken()
+  let res = await fetch(
+    `${API_URL}/${post_type}?after=${after}`,
+    getAPIOptions(token.access_token)
+  )
+  let data = await res.json()
+  return {
+    type: post_type,
+    after: data.data.after,
+    dist: data.data.dist,
+    children: data.data.children,
+  }
+}

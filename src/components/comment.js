@@ -17,12 +17,6 @@ const useStyles = makeStyles({
     maxWidth: 510,
     marginBottom: 20,
   },
-  media: {
-    height: 140,
-  },
-  favButton: {
-    marginLeft: "auto",
-  },
 })
 
 const Comment = ({ comment, index }) => {

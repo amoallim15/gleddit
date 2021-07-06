@@ -61,19 +61,25 @@ export const ContextProvider = ({ children }) => {
           case "hot":
             return {
               ...state,
-              currentHotPosts: action.payload.children,
+              currentHotPosts: state.currentHotPosts.concat(
+                action.payload.children
+              ),
               currentHotAfter: action.payload.after,
             }
           case "top":
             return {
               ...state,
-              currentTopPosts: action.payload.children,
+              currentTopPosts: state.currentTopPosts.concat(
+                action.payload.children
+              ),
               currentTopAfter: action.payload.after,
             }
           case "new":
             return {
               ...state,
-              currentNewPosts: action.payload.children,
+              currentNewPosts: state.currentNewPosts.concat(
+                action.payload.children
+              ),
               currentNewAfter: action.payload.after,
             }
           default:

@@ -11,11 +11,10 @@ import AppContext, {
   TOP_SUB_PAGE_ID,
   NEW_SUB_PAGE_ID,
 } from "./contexts.js"
-import { getPosts } from "./api.js"
+import { getPosts, getMorePosts } from "./api.js"
 
-const PENDING_STATE = 1
-const LOADING_STATE = 2
-const DONE_STATE = 3
+const LOADING_STATE = 1
+const DONE_STATE = 2
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -37,9 +36,36 @@ const useStyles = makeStyles(() => ({
 
 const PostList = () => {
   const classes = useStyles()
-  const [postListState, setPostListState] = React.useState(PENDING_STATE)
+  const [postListState, setPostListState] = React.useState(LOADING_STATE)
   const [postList, setPostList] = React.useState([])
   const { state, dispatch } = React.useContext(AppContext)
+
+  const loadMoreOnClick = () => {
+    ;(async () => {
+      let post_type = ""
+      let after = ""
+      switch (state.currentPageSubID) {
+        case HOT_SUB_PAGE_ID:
+          post_type = "hot"
+          after = state.currentHotAfter
+          break
+        case TOP_SUB_PAGE_ID:
+          post_type = "top"
+          after = state.currentTopAfter
+          break
+        case NEW_SUB_PAGE_ID:
+          post_type = "new"
+          after = state.currentNewAfter
+          break
+        default:
+          break
+      }
+      setPostListState(LOADING_STATE)
+      let more_post_list = await getMorePosts(post_type, after)
+      dispatch({ type: "refresh_post_lists", payload: more_post_list })
+      setPostListState(DONE_STATE)
+    })()
+  }
 
   React.useEffect(() => {
     ;(async () => {
@@ -86,20 +112,20 @@ const PostList = () => {
   return (
     <Box display="flex" flexDirection="column" className={classes.root}>
       <div className={classes.container}>
-        {postListState !== DONE_STATE ? (
+        <div
+          hidden={postListState !== DONE_STATE || postList.length !== 0}
+          className={classes.noPosts}
+        >
+          No posts available.
+        </div>
+        <List hidden={postList.length === 0}>
+          {postList.map((post, index) => (
+            <PostSummary key={index} post={post} index={index} />
+          ))}
+        </List>
+        <Box hidden={postListState === DONE_STATE}>
           <Loading />
-        ) : (
-          <>
-            <div hidden={postList.length !== 0} className={classes.noPosts}>
-              No posts available.
-            </div>
-            <List hidden={postList.length === 0}>
-              {postList.map((post, index) => (
-                <PostSummary key={index} post={post} index={index} />
-              ))}
-            </List>
-          </>
-        )}
+        </Box>
       </div>
 
       <Button
@@ -108,7 +134,7 @@ const PostList = () => {
         size="large"
         className={classes.moreButton}
         disabled={postListState !== DONE_STATE}
-        // onClick={loadMoreOnClick}
+        onClick={loadMoreOnClick}
       >
         LOAD MORE
       </Button>

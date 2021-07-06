@@ -14,7 +14,6 @@ import PersonIcon from "@material-ui/icons/Person"
 import { makeStyles } from "@material-ui/core/styles"
 import FavoriteIcon from "@material-ui/icons/Favorite"
 import PublicIcon from "@material-ui/icons/Public"
-import RefreshIcon from "@material-ui/icons/Refresh"
 import AppContext, {
   DISCOVERY_PAGE_ID,
   FAVORITE_PAGE_ID,
@@ -47,13 +46,6 @@ const Header = () => {
     <>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            className={classes.refreshButton}
-          >
-            <RefreshIcon />
-          </IconButton>
           <Typography variant="h6" noWrap>
             Gleddit - The best of what Gleddit has to offer
           </Typography>

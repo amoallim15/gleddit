@@ -21,9 +21,8 @@ import Loading from "./loading"
 import Comment from "./comment"
 import { getPostComments } from "./api.js"
 
-const PENDING_STATE = 1
-const LOADING_STATE = 2
-const DONE_STATE = 3
+const LOADING_STATE = 1
+const DONE_STATE = 2
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -53,7 +52,7 @@ const useStyles = makeStyles(() => ({
 
 const Post = () => {
   const classes = useStyles()
-  const [CommentListState, setCommentListState] = React.useState(PENDING_STATE)
+  const [commentListState, setCommentListState] = React.useState(LOADING_STATE)
   const [commentList, setCommentList] = React.useState([])
   const { state, dispatch } = React.useContext(AppContext)
 
@@ -127,20 +126,22 @@ const Post = () => {
       </Card>
 
       <div className={classes.comments}>TOP COMMENTS</div>
-      {CommentListState !== DONE_STATE ? (
+      <div
+        hidden={commentListState !== DONE_STATE || commentList.length !== 0}
+        className={classes.noComments}
+      >
+        No comments available.
+      </div>
+      <List
+        hidden={commentListState !== DONE_STATE || commentList.length === 0}
+      >
+        {commentList.map((comment, index) => (
+          <Comment key={index} comment={comment} index={index} />
+        ))}
+      </List>
+      <Box hidden={commentListState === DONE_STATE}>
         <Loading />
-      ) : (
-        <>
-          <div hidden={commentList.length !== 0} className={classes.noComments}>
-            No comments available.
-          </div>
-          <List hidden={commentList.length === 0}>
-            {commentList.map((comment, index) => (
-              <Comment key={index} comment={comment} index={index} />
-            ))}
-          </List>
-        </>
-      )}
+      </Box>
     </Box>
   )
 }
